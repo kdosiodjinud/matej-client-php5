@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Lmc\Matej\IntegrationTests\RequestBuilder;
 
@@ -12,9 +12,13 @@ use Lmc\Matej\Model\Response\ItemPropertiesListResponse;
 class ItemPropertiesGetRequestBuilderTest extends IntegrationTestCase
 {
     /** @test */
-    public function shouldGetListOfPropertiesFromMatej()
+    public function shouldGetListOfPropertiesFromMatej(): void
     {
-        $response = $this->createMatejInstance()->request()->getItemProperties()->send();
+        $response = $this->createMatejInstance()
+            ->request()
+            ->getItemProperties()
+            ->send();
+
         $this->assertResponseCommandStatuses($response, 'OK');
         $this->assertInstanceOf(ItemPropertiesListResponse::class, $response);
         $this->assertTrue($response->isSuccessful());
