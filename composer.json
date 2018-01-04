@@ -54,10 +54,5 @@
             "vendor/bin/php-cs-fixer fix -vvv --diff --dry-run --ansi",
             "vendor/bin/parallel-lint src/ tests/"
         ]
-    },
-    "config": {
-        "platform": {
-            "php": "5.6.30"
-        }
     }
 }
