@@ -22,7 +22,7 @@
         }
     },
     "require": {
-        "php": "^7.2",
+        "php": "^7.1",
         "php-http/httplug": "^1.1",
         "php-http/message-factory": "^1.0.2",
         "php-http/client-implementation": "^1.0",
@@ -36,7 +36,7 @@
         "php-http/guzzle6-adapter": "^1.1.1",
         "php-http/mock-client": "^1.0",
         "php-http/message": "^1.0",
-        "phpunit/phpunit": "^5.7 || ^6.4",
+        "phpunit/phpunit": "^5.7 || ^6.4 <6.5",
         "friendsofphp/php-cs-fixer": "^2.7",
         "php-coveralls/php-coveralls": "^2.0",
         "symfony/var-dumper": "^3.3",
