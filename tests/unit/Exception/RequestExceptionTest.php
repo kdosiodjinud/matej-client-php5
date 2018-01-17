@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Lmc\Matej\Exception;
 
@@ -10,14 +10,12 @@ use Lmc\Matej\UnitTestCase;
 class RequestExceptionTest extends UnitTestCase
 {
     /** @test */
-    public function shouldConstructNewException(): void
+    public function shouldConstructNewException()
     {
         $message = 'Foo bar baz message';
         $request = new Request('GET', 'http://foo.com');
         $response = new Response(StatusCodeInterface::STATUS_NOT_FOUND);
-
         $exception = new RequestException($message, $request, $response);
-
         $this->assertSame($message, $exception->getMessage());
         $this->assertSame(StatusCodeInterface::STATUS_NOT_FOUND, $exception->getCode());
         $this->assertSame($request, $exception->getRequest());
