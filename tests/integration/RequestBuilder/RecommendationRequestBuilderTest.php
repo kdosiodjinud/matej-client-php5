@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Lmc\Matej\IntegrationTests\RequestBuilder;
 
@@ -16,29 +16,45 @@ use Lmc\Matej\Model\Response\RecommendationsResponse;
 class RecommendationRequestBuilderTest extends IntegrationTestCase
 {
     /** @test */
-    public function shouldExecuteRecommendationRequestOnly()
+    public function shouldExecuteRecommendationRequestOnly(): void
     {
-        $response = $this->createMatejInstance()->request()->recommendation($this->createRecommendationCommand('user-a'))->send();
+        $response = $this->createMatejInstance()
+            ->request()
+            ->recommendation($this->createRecommendationCommand('user-a'))
+            ->send();
+
         $this->assertInstanceOf(RecommendationsResponse::class, $response);
         $this->assertResponseCommandStatuses($response, 'SKIPPED', 'SKIPPED', 'OK');
         $this->assertShorthandResponse($response, 'SKIPPED', 'SKIPPED', 'OK');
     }
 
     /** @test */
-    public function shouldExecuteRecommendationRequestWithUserMergeAndInteraction()
+    public function shouldExecuteRecommendationRequestWithUserMergeAndInteraction(): void
     {
-        $response = $this->createMatejInstance()->request()->recommendation($this->createRecommendationCommand('user-b'))->setUserMerge(UserMerge::mergeInto('user-b', 'user-a'))->setInteraction(Interaction::bookmark('user-a', 'item-a'))->send();
+        $response = $this->createMatejInstance()
+            ->request()
+            ->recommendation($this->createRecommendationCommand('user-b'))
+            ->setUserMerge(UserMerge::mergeInto('user-b', 'user-a'))
+            ->setInteraction(Interaction::bookmark('user-a', 'item-a'))
+            ->send();
+
         $this->assertInstanceOf(RecommendationsResponse::class, $response);
         $this->assertResponseCommandStatuses($response, 'OK', 'OK', 'OK');
         $this->assertShorthandResponse($response, 'OK', 'OK', 'OK');
     }
 
-    private function createRecommendationCommand($username)
+    private function createRecommendationCommand(string $username): UserRecommendation
     {
-        return UserRecommendation::create($username, 5, 'integration-test-scenario', 0.5, 3600);
+        return UserRecommendation::create(
+            $username,
+            5,
+            'integration-test-scenario',
+            0.50,
+            3600
+        );
     }
 
-    private function assertShorthandResponse(RecommendationsResponse $response, $interactionStatus, $userMergeStatus, $recommendationStatus)
+    private function assertShorthandResponse(RecommendationsResponse $response, $interactionStatus, $userMergeStatus, $recommendationStatus): void
     {
         $this->assertInstanceOf(CommandResponse::class, $response->getInteraction());
         $this->assertInstanceOf(CommandResponse::class, $response->getUserMerge());

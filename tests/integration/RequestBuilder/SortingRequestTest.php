@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Lmc\Matej\IntegrationTests\RequestBuilder;
 
@@ -16,24 +16,34 @@ use Lmc\Matej\Model\Response\SortingResponse;
 class SortingRequestTest extends IntegrationTestCase
 {
     /** @test */
-    public function shouldExecuteSortingRequestOnly()
+    public function shouldExecuteSortingRequestOnly(): void
     {
-        $response = $this->createMatejInstance()->request()->sorting(Sorting::create('user-a', ['itemA', 'itemB', 'itemC']))->send();
+        $response = $this->createMatejInstance()
+            ->request()
+            ->sorting(Sorting::create('user-a', ['itemA', 'itemB', 'itemC']))
+            ->send();
+
         $this->assertInstanceOf(SortingResponse::class, $response);
         $this->assertResponseCommandStatuses($response, 'SKIPPED', 'SKIPPED', 'OK');
         $this->assertShorthandResponse($response, 'SKIPPED', 'SKIPPED', 'OK');
     }
 
     /** @test */
-    public function shouldExecuteSortingRequestWithUserMergeAndInteraction()
+    public function shouldExecuteSortingRequestWithUserMergeAndInteraction(): void
     {
-        $response = $this->createMatejInstance()->request()->sorting(Sorting::create('user-b', ['item-a', 'item-b', 'itemC-c']))->setUserMerge(UserMerge::mergeInto('user-b', 'user-a'))->setInteraction(Interaction::bookmark('user-a', 'item-a'))->send();
+        $response = $this->createMatejInstance()
+            ->request()
+            ->sorting(Sorting::create('user-b', ['item-a', 'item-b', 'itemC-c']))
+            ->setUserMerge(UserMerge::mergeInto('user-b', 'user-a'))
+            ->setInteraction(Interaction::bookmark('user-a', 'item-a'))
+            ->send();
+
         $this->assertInstanceOf(SortingResponse::class, $response);
         $this->assertResponseCommandStatuses($response, 'OK', 'OK', 'OK');
         $this->assertShorthandResponse($response, 'OK', 'OK', 'OK');
     }
 
-    private function assertShorthandResponse(SortingResponse $response, $interactionStatus, $userMergeStatus, $sortingStatus)
+    private function assertShorthandResponse(SortingResponse $response, $interactionStatus, $userMergeStatus, $sortingStatus): void
     {
         $this->assertInstanceOf(CommandResponse::class, $response->getInteraction());
         $this->assertInstanceOf(CommandResponse::class, $response->getUserMerge());
