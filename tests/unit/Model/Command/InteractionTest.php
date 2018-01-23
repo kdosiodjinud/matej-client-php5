@@ -22,6 +22,9 @@ class InteractionTest extends TestCase
      * @test
      * @dataProvider provideConstructorName
      * @runInSeparateProcess so that time() can be mocked safely
+     * @param string $constructorName
+     * @param string $expectedInteractionType
+     * @param array $extraConstructorParams
      */
     public function shouldBeInstantiableViaNamedConstructors(
         string $constructorName,

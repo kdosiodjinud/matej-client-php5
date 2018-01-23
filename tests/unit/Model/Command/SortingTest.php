@@ -19,6 +19,8 @@ class SortingTest extends UnitTestCase
     /**
      * Execute asserts against user merge command
      * @param Sorting $command
+     * @param string $userId
+     * @param array $itemIds
      */
     private function assertSortingCommand($command, string $userId, array $itemIds): void
     {

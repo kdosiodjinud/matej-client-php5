@@ -10,6 +10,10 @@ class CommandResponseTest extends UnitTestCase
     /**
      * @test
      * @dataProvider provideObjectResponses
+     * @param \stdClass $objectResponse
+     * @param string $expectedStatus
+     * @param string $expectedMessage
+     * @param array $expectedData
      */
     public function shouldBeInstantiableFromRawObject(
         \stdClass $objectResponse,
@@ -65,6 +69,8 @@ class CommandResponseTest extends UnitTestCase
     /**
      * @test
      * @dataProvider provideResponseStatuses
+     * @param string $status
+     * @param bool $shouldBeSuccessful
      */
     public function shouldDetectSuccessfulResponse(string $status, bool $shouldBeSuccessful): void
     {

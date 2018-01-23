@@ -20,6 +20,8 @@ class ItemPropertiesSetupRequestBuilderTest extends TestCase
     /**
      * @test
      * @dataProvider provideBuilderVariants
+     * @param bool $shouldDelete
+     * @param string $expectedMethod
      */
     public function shouldBuildRequestWithCommands(bool $shouldDelete, string $expectedMethod): void
     {

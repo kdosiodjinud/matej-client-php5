@@ -19,6 +19,10 @@ class RequestBuilderFactoryTest extends TestCase
     /**
      * @test
      * @dataProvider provideBuilderMethods
+     * @param string $factoryMethod
+     * @param string $expectedBuilderClass
+     * @param \Closure $minimalBuilderInit
+     * @param ... $factoryArguments
      */
     public function shouldInstantiateBuilderToBuildAndSendRequest(
         string $factoryMethod,

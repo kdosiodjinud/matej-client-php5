@@ -10,6 +10,8 @@ class ItemPropertySetupTest extends TestCase
     /**
      * @test
      * @dataProvider provideConstructorName
+     * @param string $constructorName
+     * @param string $expectedPropertyType
      */
     public function shouldBeInstantiableViaNamedConstructors(
         string $constructorName,
@@ -36,6 +38,7 @@ class ItemPropertySetupTest extends TestCase
     /**
      * @test
      * @dataProvider provideConstructorName
+     * @param string $constructorName
      */
     public function shouldNotAllowItemIdAsPropertyName(string $constructorName): void
     {

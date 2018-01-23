@@ -15,6 +15,8 @@ class HmacAuthenticationTest extends UnitTestCase
     /**
      * @test
      * @dataProvider provideUris
+     * @param string $originalPath
+     * @param string $expectedSingedPath
      */
     public function shouldSignRequest(string $originalPath, string $expectedSingedPath): void
     {
