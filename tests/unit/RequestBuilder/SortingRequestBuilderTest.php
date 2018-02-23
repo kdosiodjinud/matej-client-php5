@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Lmc\Matej\RequestBuilder;
 
@@ -21,64 +21,84 @@ use PHPUnit\Framework\TestCase;
 class SortingRequestBuilderTest extends TestCase
 {
     /** @test */
-    public function shouldBuildRequestWithCommands()
+    public function shouldBuildRequestWithCommands(): void
     {
         $sortingCommand = Sorting::create('userId1', ['itemId1', 'itemId2']);
         $builder = new SortingRequestBuilder($sortingCommand);
+
         $interactionCommand = Interaction::detailView('sourceId1', 'itemId1');
         $builder->setInteraction($interactionCommand);
+
         $userMergeCommand = UserMerge::mergeFromSourceToTargetUser('sourceId1', 'userId1');
         $builder->setUserMerge($userMergeCommand);
+
         $builder->setRequestId('custom-request-id-foo');
+
         $request = $builder->build();
+
         $this->assertInstanceOf(Request::class, $request);
         $this->assertSame(RequestMethodInterface::METHOD_POST, $request->getMethod());
         $this->assertSame('/sorting', $request->getPath());
+
         $requestData = $request->getData();
         $this->assertCount(3, $requestData);
         $this->assertSame($interactionCommand, $requestData[0]);
         $this->assertSame($userMergeCommand, $requestData[1]);
         $this->assertSame($sortingCommand, $requestData[2]);
+
         $this->assertSame('custom-request-id-foo', $request->getRequestId());
         $this->assertSame(SortingResponse::class, $request->getResponseClass());
     }
 
     /** @test */
-    public function shouldThrowExceptionWhenSendingCommandsWithoutRequestManager()
+    public function shouldThrowExceptionWhenSendingCommandsWithoutRequestManager(): void
     {
         $builder = new SortingRequestBuilder(Sorting::create('userId1', ['itemId1', 'itemId2']));
+
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Instance of RequestManager must be set to request builder');
         $builder->send();
     }
 
     /** @test */
-    public function shouldSendRequestViaRequestManager()
+    public function shouldSendRequestViaRequestManager(): void
     {
         $requestManagerMock = $this->createMock(RequestManager::class);
-        $requestManagerMock->expects($this->once())->method('sendRequest')->with($this->isInstanceOf(Request::class))->willReturn(new Response(0, 0, 0, 0));
+        $requestManagerMock->expects($this->once())
+            ->method('sendRequest')
+            ->with($this->isInstanceOf(Request::class))
+            ->willReturn(new Response(0, 0, 0, 0));
+
         $builder = new SortingRequestBuilder(Sorting::create('userId1', ['itemId1', 'itemId2']));
         $builder->setRequestManager($requestManagerMock);
         $builder->send();
     }
 
     /** @test */
-    public function shouldThrowExceptionWhenUserOfInteractionDiffersFromSorting()
+    public function shouldThrowExceptionWhenUserOfInteractionDiffersFromSorting(): void
     {
         $builder = new SortingRequestBuilder(Sorting::create('userId1', ['itemId1', 'itemId2']));
+
         $builder->setInteraction(Interaction::purchase('different-user', 'itemId1'));
+
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('User in Interaction command ("different-user") must be the same as user in Sorting command ("userId1")');
+        $this->expectExceptionMessage(
+            'User in Interaction command ("different-user") must be the same as user in Sorting command ("userId1")'
+        );
         $builder->build();
     }
 
     /** @test */
-    public function shouldThrowExceptionWhenUserOfUserMergeDiffersFromSorting()
+    public function shouldThrowExceptionWhenUserOfUserMergeDiffersFromSorting(): void
     {
         $builder = new SortingRequestBuilder(Sorting::create('userId1', ['itemId1', 'itemId2']));
+
         $builder->setUserMerge(UserMerge::mergeInto('different-user', 'userId1'));
+
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('User in UserMerge command ("different-user") must be the same as user in Sorting command ("userId1")');
+        $this->expectExceptionMessage(
+            'User in UserMerge command ("different-user") must be the same as user in Sorting command ("userId1")'
+        );
         $builder->build();
     }
 
@@ -86,11 +106,12 @@ class SortingRequestBuilderTest extends TestCase
      * ([interaction], [user merge], [sorting]): (A, A -> B, B)
      * @test
      */
-    public function shouldPassOnCorrectSequenceOfUsersWhenMerging()
+    public function shouldPassOnCorrectSequenceOfUsersWhenMerging(): void
     {
         $interactionCommand = Interaction::purchase('test-user-a', 'test-item-id');
         $userMergeCommand = UserMerge::mergeFromSourceToTargetUser('test-user-a', 'test-user-b');
         $sortingCommand = Sorting::create('test-user-b', ['itemId1', 'itemId2']);
+
         $builder = new SortingRequestBuilder($sortingCommand);
         $builder->setUserMerge($userMergeCommand);
         $builder->setInteraction($interactionCommand);
@@ -101,13 +122,17 @@ class SortingRequestBuilderTest extends TestCase
      * ([interaction], [user merge], [sorting]): (A, B -> A, A)
      * @test
      */
-    public function shouldFailOnIncorrectSequenceOfUsersWhenMerging()
+    public function shouldFailOnIncorrectSequenceOfUsersWhenMerging(): void
     {
         $interactionCommand = Interaction::purchase('test-user-a', 'test-item-id');
         $userMergeCommand = UserMerge::mergeFromSourceToTargetUser('test-user-b', 'test-user-a');
         $sortingCommand = Sorting::create('test-user-a', ['itemId1', 'itemId2']);
+
         $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('Source user in UserMerge command ("test-user-b") must be the same as user in Interaction command ("test-user-a")');
+        $this->expectExceptionMessage(
+            'Source user in UserMerge command ("test-user-b") must be the same as user in Interaction command ("test-user-a")'
+        );
+
         $builder = new SortingRequestBuilder($sortingCommand);
         $builder->setUserMerge($userMergeCommand);
         $builder->setInteraction($interactionCommand);

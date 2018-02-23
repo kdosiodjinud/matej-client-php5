@@ -10,21 +10,21 @@ use Lmc\Matej\Model\Response;
 use Lmc\Matej\UnitTestCase;
 
 /**
- * @covers \Lmc\Matej\RequestBuilder\ItemPropertiesGetRequestBuilder
+ * @covers \Lmc\Matej\RequestBuilder\ResetDatabaseRequestBuilder
  */
-class ItemPropertiesGetRequestBuilderTest extends UnitTestCase
+class ResetDatabaseRequestBuilderTest extends UnitTestCase
 {
     /** @test */
     public function shouldBuildRequestWithCommands(): void
     {
-        $builder = new ItemPropertiesGetRequestBuilder();
+        $builder = new ResetDatabaseRequestBuilder();
         $builder->setRequestId('custom-request-id-foo');
 
         $request = $builder->build();
 
         $this->assertInstanceOf(Request::class, $request);
-        $this->assertSame(RequestMethodInterface::METHOD_GET, $request->getMethod());
-        $this->assertSame('/item-properties', $request->getPath());
+        $this->assertSame(RequestMethodInterface::METHOD_DELETE, $request->getMethod());
+        $this->assertSame('/database', $request->getPath());
         $this->assertEmpty($request->getData());
         $this->assertSame('custom-request-id-foo', $request->getRequestId());
     }
@@ -35,7 +35,7 @@ class ItemPropertiesGetRequestBuilderTest extends UnitTestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Instance of RequestManager must be set to request builder');
 
-        $builder = new ItemPropertiesGetRequestBuilder();
+        $builder = new ResetDatabaseRequestBuilder();
         $builder->send();
     }
 
@@ -48,7 +48,7 @@ class ItemPropertiesGetRequestBuilderTest extends UnitTestCase
             ->with($this->isInstanceOf(Request::class))
             ->willReturn(new Response(0, 0, 0, 0));
 
-        $builder = new ItemPropertiesGetRequestBuilder();
+        $builder = new ResetDatabaseRequestBuilder();
         $builder->setRequestManager($requestManagerMock);
         $builder->send();
     }
