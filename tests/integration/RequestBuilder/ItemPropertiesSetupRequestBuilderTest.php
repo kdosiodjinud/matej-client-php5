@@ -15,6 +15,7 @@ class ItemPropertiesSetupRequestBuilderTest extends IntegrationTestCase
     /**
      * @test
      * @dataProvider provideBuilders
+     * @param ItemPropertiesSetupRequestBuilder $builder
      */
     public function shouldThrowExceptionWhenSendingBlankRequests(ItemPropertiesSetupRequestBuilder $builder): void
     {

@@ -16,6 +16,7 @@ class ExceptionPluginTest extends TestCase
     /**
      * @test
      * @dataProvider provideSuccessStatusCodes
+     * @param int $statusCode
      */
     public function shouldReturnResponseWhenNoError(int $statusCode): void
     {
@@ -47,6 +48,8 @@ class ExceptionPluginTest extends TestCase
     /**
      * @test
      * @dataProvider provideErrorStatusCodes
+     * @param int $statusCode
+     * @param string $expectedExceptionClass
      */
     public function shouldThrowExceptionBasedOnStatusCode(int $statusCode, string $expectedExceptionClass): void
     {

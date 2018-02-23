@@ -14,6 +14,11 @@ class ResponseTest extends UnitTestCase
     /**
      * @dataProvider provideResponseData
      * @test
+     * @param int $numberOfCommands
+     * @param int $numberOfSuccessful
+     * @param int $numberOfFailed
+     * @param int $numberOfSkipped
+     * @param array $commandResponses
      */
     public function shouldBeInstantiable(
         int $numberOfCommands,
@@ -79,6 +84,12 @@ class ResponseTest extends UnitTestCase
     /**
      * @dataProvider provideInconsistentData
      * @test
+     * @param int $numberOfCommands
+     * @param int $numberOfSuccessful
+     * @param int $numberOfFailed
+     * @param int $numberOfSkipped
+     * @param array $commandResponses
+     * @param string $expectedExceptionMessage
      */
     public function shouldThrowExceptionWhenInconsistentDataProvided(
         int $numberOfCommands,

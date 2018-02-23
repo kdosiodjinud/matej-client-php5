@@ -16,6 +16,7 @@ class AssertionTest extends TestCase
     /**
      * @test
      * @dataProvider provideValidTypeIdentifiers
+     * @param string $typeIdentifier
      */
     public function shouldAssertValidTypeIdentifier(string $typeIdentifier): void
     {
@@ -71,6 +72,7 @@ class AssertionTest extends TestCase
     /**
      * @test
      * @dataProvider provideValidBatchSize
+     * @param int $batchSize
      */
     public function shouldAssertValidBatchSize(int $batchSize): void
     {
@@ -98,6 +100,7 @@ class AssertionTest extends TestCase
     /**
      * @test
      * @dataProvider provideInvalidBatchSize
+     * @param int $batchSize
      */
     public function shouldAssertInvalidBatchSize(int $batchSize): void
     {

@@ -20,6 +20,8 @@ class ItemPropertyTest extends TestCase
     /**
      * @test
      * @dataProvider provideProperties
+     * @param array $properties
+     * @param array $expectedParameters
      */
     public function shouldBeInstantiableViaNamedConstructor(array $properties, array $expectedParameters): void
     {
