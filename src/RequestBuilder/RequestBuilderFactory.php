@@ -80,6 +80,22 @@ class RequestBuilderFactory
     }
 
     /**
+     * @return ForgetRequestBuilder
+     */
+    public function forget()
+    {
+        return $this->createConfiguredBuilder(ForgetRequestBuilder::class);
+    }
+
+    /**
+     * @return ResetDatabaseRequestBuilder
+     */
+    public function resetDatabase()
+    {
+        return $this->createConfiguredBuilder(ResetDatabaseRequestBuilder::class);
+    }
+
+    /**
      * @param string $builderClass
      * @param array ...$args
      * @return mixed
